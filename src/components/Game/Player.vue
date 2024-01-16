@@ -7,10 +7,14 @@
 <script lang="ts" setup>
 import keeper from "../../assets/keeper.png";
 import { usePlayerStore } from "../../store/player";
-import { computed, onMounted, onUnmounted } from "vue";
+import { onMounted, onUnmounted } from "vue";
+import { usePosition } from "../../composables/usePosition";
 
 useMove();
-const { position } = usePosition();
+
+const { player } = usePlayerStore();
+const { position } = usePosition(player);
+
 function useMove() {
   const {
     playerMoveToLeft,
@@ -41,16 +45,6 @@ function useMove() {
   onUnmounted(() => {
     window.removeEventListener("keydown", handleMove);
   });
-}
-
-function usePosition() {
-  const { player } = usePlayerStore();
-  const STEP = 32;
-  const position = computed(() => ({
-    top: `${player.y * STEP}px`,
-    left: `${player.x * STEP}px`,
-  }));
-  return { position };
 }
 </script>
 
